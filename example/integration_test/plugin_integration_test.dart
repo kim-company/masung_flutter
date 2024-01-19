@@ -22,11 +22,19 @@ void main() {
     expect(version?.isNotEmpty, true);
   });
 
-  testWidgets('print Text Version', (WidgetTester tester) async {
+  testWidgets('print text test', (WidgetTester tester) async {
     final MasungFlutter plugin = MasungFlutter();
-    final String? version = await plugin.getPlatformVersion();
+    final bool? result = await plugin.printString("Hello World");
     // The version string depends on the host platform running the test, so
     // just assert that some non-empty string is returned.
-    expect(version?.isNotEmpty, true);
+    expect(result, true);
+  });
+
+  testWidgets('Cut paper test', (WidgetTester tester) async {
+    final MasungFlutter plugin = MasungFlutter();
+    var result = await plugin.printString("Hello World");
+    // The version string depends on the host platform running the test, so
+    // just assert that some non-empty string is returned.
+    expect(result, true);
   });
 }

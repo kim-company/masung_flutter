@@ -27,18 +27,27 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-    if (call.method.equals("getPlatformVersion")) {
-      result.success("Android " + android.os.Build.VERSION.RELEASE);
-    } else if(call.method.equals("printString")){
-      String text = call.argument("text");
-      boolean success = printString(text);
-      result.success(success);
-    } else if(call.method.equals("cutPaper")) {
-      boolean success = cutPaper();
-      result.success(success);
-    }
-    else {
-      result.notImplemented();
+    switch (call.method) {
+      case "getPlatformVersion":
+        result.success("Android " + android.os.Build.VERSION.RELEASE);
+        break;
+      case "printString":
+        String text = call.argument("text");
+        if (text != null && printString(text)) {
+          result.success(true);
+        } else {
+          result.error("UNAVAILABLE", "Printing failed.", null);
+        }
+        break;
+      case "cutPaper":
+        if (cutPaper()) {
+          result.success(true);
+        } else {
+          result.error("UNAVAILABLE", "Cutting paper failed.", null);
+        }
+        break;
+      default:
+        result.notImplemented();
     }
   }
 
