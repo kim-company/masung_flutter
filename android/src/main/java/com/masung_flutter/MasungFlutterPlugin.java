@@ -17,7 +17,6 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
   private MethodChannel channel;
   private MasungPrinterCom printerCom;
 
-
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "masung_flutter");
@@ -32,18 +31,19 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         result.success("Android " + android.os.Build.VERSION.RELEASE);
         break;
       case "printString":
-        String text = call.argument("text");
+        String text = (String) call.arguments;
         if (text != null && printString(text)) {
           result.success(true);
         } else {
-          result.error("UNAVAILABLE", "Printing failed.", null);
+          result.error("UNAVAILABLE", "Printing failed.", false);
         }
         break;
       case "cutPaper":
+        result.success(true);
         if (cutPaper()) {
           result.success(true);
         } else {
-          result.error("UNAVAILABLE", "Cutting paper failed.", null);
+          result.error("UNAVAILABLE", "Cutting paper failed.", false);
         }
         break;
       default:
@@ -53,6 +53,8 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
   private boolean cutPaper() {
     try{
+      if(printerCom == null)
+        printerCom = new MasungPrinterCom();
       printerCom.cutPaper();
       return true;
     }
@@ -63,6 +65,8 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
   private boolean printString(String text) {
     try {
+      if(printerCom == null)
+        printerCom = new MasungPrinterCom();
       printerCom.printText(text);
       return true;
     } catch (Exception e) {

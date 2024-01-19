@@ -26,4 +26,15 @@ public class MasungFlutterPluginTest {
 
     verify(mockResult).success("Android " + android.os.Build.VERSION.RELEASE);
   }
+
+  @Test
+  public void onMethodCall_printString_returnsExpectedValue() {
+    MasungFlutterPlugin plugin = new MasungFlutterPlugin();
+
+    final MethodCall call = new MethodCall("printString", "Test");
+    MethodChannel.Result mockResult = mock(MethodChannel.Result.class);
+    plugin.onMethodCall(call, mockResult);
+
+    verify(mockResult).success(true);
+  }
 }
