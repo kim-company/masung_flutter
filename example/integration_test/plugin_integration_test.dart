@@ -32,7 +32,7 @@ void main() {
 
   testWidgets('Cut paper test', (WidgetTester tester) async {
     final MasungFlutter plugin = MasungFlutter();
-    var result = await plugin.printString("Hello World");
+    var result = await plugin.cutPaper();
     // The version string depends on the host platform running the test, so
     // just assert that some non-empty string is returned.
     expect(result, true);

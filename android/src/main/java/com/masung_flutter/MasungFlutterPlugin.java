@@ -39,7 +39,6 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         }
         break;
       case "cutPaper":
-        result.success(true);
         if (cutPaper()) {
           result.success(true);
         } else {
