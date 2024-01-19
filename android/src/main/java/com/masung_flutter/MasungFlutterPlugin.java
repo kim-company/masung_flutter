@@ -15,12 +15,14 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
   /// when the Flutter Engine is detached from the Activity
   private MethodChannel channel;
+  private MasungPrinterCom printerCom;
 
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "masung_flutter");
     channel.setMethodCallHandler(this);
+    printerCom = new MasungPrinterCom();
   }
 
   @Override
