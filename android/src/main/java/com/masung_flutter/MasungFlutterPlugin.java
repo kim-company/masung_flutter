@@ -1,5 +1,7 @@
 package com.masung_flutter;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -19,6 +21,7 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
   // when the Flutter Engine is detached from the Activity
   private MethodChannel channel;
   private MasungPrinterCom printerCom;
+  private Context context;
 
   /**
    * This method is called when the plugin is attached to the Flutter engine.
@@ -29,7 +32,8 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "masung_flutter");
     channel.setMethodCallHandler(this);
-    printerCom = new MasungPrinterCom();
+    context = flutterPluginBinding.getApplicationContext();
+    printerCom = new MasungPrinterCom(context);
   }
 
   /**
@@ -72,7 +76,7 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
   private boolean cutPaper() {
     try{
       if(printerCom == null)
-        printerCom = new MasungPrinterCom();
+        printerCom = new MasungPrinterCom(context);
       printerCom.cutPaper();
       return true;
     }
@@ -90,7 +94,7 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
   private boolean printString(String text) {
     try {
       if(printerCom == null)
-        printerCom = new MasungPrinterCom();
+        printerCom = new MasungPrinterCom(context);
       printerCom.printText(text);
       return true;
     } catch (Exception e) {

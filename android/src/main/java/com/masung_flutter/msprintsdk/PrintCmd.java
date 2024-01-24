@@ -1633,57 +1633,6 @@ public abstract class PrintCmd {
         return bCmd;
     }
 
-    /*
-     * 4.7 设置打印机ID或名称
-     * @param IDorNAME  打印机ID或名称
-     * @return int
-     */
-//	public static byte[] SetPrintIDorName(String IDorNAME) {
-//		byte[] b_send = new byte[64];
-//		int iIndex;
-//		int length, i;
-//		length = IDorNAME.length();
-//		byte[] strIDorNAME = new byte[length];
-//		strIDorNAME = IDorNAME.getBytes(); // 转变位数组
-//		if ((length == 0) || (length > 30))
-//			return b_send;
-//		iIndex = 0;
-//		b_send[iIndex++] = 0x13;
-//		b_send[iIndex++] = 0x75;
-//		b_send[iIndex++] = (byte) length;
-//		for (i = 0; i < length; i++) {
-//			b_send[iIndex++] = strIDorNAME[i];
-//		}
-//		return b_send;
-//	}
-
-    /*
-     * 4.8 获取打印机ID或名称
-     * @param strIDorNAME  打印机ID或名称
-     */
-//	public static byte[] GetPrintIDorName(byte[] strIDorNAME) {
-//		int iIndex = 0;
-//		byte[] b_send = new byte[2];
-//		byte[] b_recv = new byte[128];
-//
-//		b_send[iIndex++] = 0x13;
-//		b_send[iIndex++] = 0x76;
-//		System.arraycopy(b_send, iIndex, b_recv, 0, 32);// b_send拷贝到b_recv数组中去
-//		for (iIndex = 0; iIndex < 32; iIndex++) {
-//			strIDorNAME[iIndex] = b_recv[iIndex];
-//		}
-//		return strIDorNAME;
-//	}
-
-
-
-    /** END================定制类打印接口说明(EP800)============== */
-
-
-
-    /** ========================Start【HexUtils之前用到的函数】========================= */
-
-
     private static String getHexResult(String targetStr) {
         StringBuilder hexStr = new StringBuilder();
         int len = targetStr.length();
