@@ -21,8 +21,10 @@ class MasungFlutter {
   }
 
   /// Sets the margin for the text
+  /// - Unit: 0.125mm
+  /// - Range: 0~576
   ///
-  /// The [margin] parameter specifies the overall margin, while the [left] and [right] parameters specify the left and right margins respectively.
+  /// The[margin] parameter specifies the overall margin, while the [left] and [right] parameters specify the left and right margins respectively.
   /// Returns a [Future] that completes with a [bool] value indicating whether the margin was successfully set.
   Future<bool?> setMargin({int? margin, int? left = 0, int? right = 0}) {
     return _channel.setMargin(margin: margin, left: left, right: right);
@@ -37,6 +39,7 @@ class MasungFlutter {
   }
 
   /// Sets the font size for the text.
+  /// - Range: 1~8
   ///
   /// The [fontSize] parameter specifies the font size, while the [width] and [height] parameters specify the width and height scaling factors respectively.
   /// Returns a [Future] that completes with a [bool] value indicating whether the font size was successfully set.
@@ -62,6 +65,8 @@ class MasungFlutter {
   }
 
   /// Sets the line spacing for the text.
+  /// - Unit: 0.125mm
+  /// - Range: 0~127
   ///
   /// The [lineSpace] parameter specifies the line spacing.
   /// Returns a [Future] that completes with a [bool] value indicating whether the line spacing was successfully set.
