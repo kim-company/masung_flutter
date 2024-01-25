@@ -1,7 +1,6 @@
 name: masung_flutter
-description: 'A new Flutter plugin project.'
+description: 'A flutter package to interact with Masung printer'
 version: 0.0.1
-homepage:
 
 environment:
   sdk: '>=3.2.5 <4.0.0'
