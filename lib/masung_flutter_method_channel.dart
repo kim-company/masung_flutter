@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:masung_flutter/alignment_enum.dart';
-import 'package:masung_flutter/under_line_enum.dart';
+import 'package:masung_flutter/model/alignment_enum.dart';
+import 'package:masung_flutter/model/under_line_enum.dart';
 
 import 'masung_flutter_platform_interface.dart';
 

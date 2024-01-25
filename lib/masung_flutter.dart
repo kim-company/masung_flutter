@@ -1,6 +1,6 @@
-import 'package:masung_flutter/alignment_enum.dart';
+import 'package:masung_flutter/model/alignment_enum.dart';
 import 'package:masung_flutter/masung_flutter_method_channel.dart';
-import 'package:masung_flutter/under_line_enum.dart';
+import 'package:masung_flutter/model/under_line_enum.dart';
 
 /// A class that provides methods for interacting with the Masung Flutter plugin.
 class MasungFlutter {
