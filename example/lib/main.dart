@@ -26,7 +26,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
-    printText();
   }
 
   Future<void> initPlatformState() async {
@@ -48,20 +47,28 @@ class _MyAppState extends State<MyApp> {
 
   printText() {
     _masungFlutterPlugin.setFontSize(
-      fontSize: 1,
+      fontSize: 4,
     );
     _masungFlutterPlugin.setAlignment(AlignmentEnum.center);
     _masungFlutterPlugin.setFontBold(true);
     _masungFlutterPlugin.setFontUnderline(UnderLineEnum.double);
     _masungFlutterPlugin.printString('Skorpion Express', newLine: true);
     _masungFlutterPlugin.clearCache();
-    _masungFlutterPlugin.setMargin(margin: 20);
+    _masungFlutterPlugin.setFontSize(
+      fontSize: 1,
+    );
     _masungFlutterPlugin.printString('Order:', newLine: true);
     _masungFlutterPlugin.printString('1234567890', newLine: true);
+    _masungFlutterPlugin.setFontSize(
+      fontSize: 0,
+    );
     _masungFlutterPlugin.printString('Date:', newLine: true);
     _masungFlutterPlugin.printString('2021-09-09', newLine: true);
+    _masungFlutterPlugin.setFontSize(
+      fontSize: -1,
+    );
     _masungFlutterPlugin.printString('Time:', newLine: true);
-    _masungFlutterPlugin.feedDot(10);
+    _masungFlutterPlugin.feedDot(100);
     _masungFlutterPlugin.printString('09:09:09', newLine: true);
     _masungFlutterPlugin.feedLine(5);
     _masungFlutterPlugin.cutPaper(false);
@@ -79,7 +86,13 @@ class _MyAppState extends State<MyApp> {
             Center(
               child: Text('Running on: $_platformVersion\n'),
             ),
-            Text(b ? 'true' : 'false')
+            Text(b ? 'true' : 'false'),
+            TextButton(
+              onPressed: () {
+                printText();
+              },
+              child: const Text('Print'),
+            ),
           ],
         ),
       ),

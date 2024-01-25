@@ -53,11 +53,11 @@ class MethodChannelMasungFlutter extends MasungFlutterPlatform {
   Future<bool?> setFontSize(
       {int? fontSize, int? width = 1, int? height = 1}) async {
     if (fontSize != null) {
-      return await methodChannel.invokeMethod<bool>('setFontSize', {
+      return await methodChannel.invokeMethod<bool>('setTextSize', {
         'fontSize': fontSize,
       });
     } else {
-      return await methodChannel.invokeMethod<bool>('setFontSize', {
+      return await methodChannel.invokeMethod<bool>('setTextSize', {
         'width': width,
         'height': height,
       });
@@ -66,21 +66,21 @@ class MethodChannelMasungFlutter extends MasungFlutterPlatform {
 
   @override
   Future<bool?> setFontBold(bool bold) async {
-    return await methodChannel.invokeMethod<bool>('setFontBold', {
+    return await methodChannel.invokeMethod<bool>('setBold', {
       'bold': bold,
     });
   }
 
   @override
   Future<bool?> setFontUnderline(UnderLineEnum underline) async {
-    return await methodChannel.invokeMethod<bool>('setFontUnderline', {
+    return await methodChannel.invokeMethod<bool>('setUnderline', {
       'underline': underline.value,
     });
   }
 
   @override
   Future<bool?> setLineSpace(int lineSpace) async {
-    return await methodChannel.invokeMethod<bool>('setLineSpace', {
+    return await methodChannel.invokeMethod<bool>('setLineSpacing', {
       'lineSpace': lineSpace,
     });
   }

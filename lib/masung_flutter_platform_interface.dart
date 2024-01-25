@@ -44,6 +44,7 @@ abstract class MasungFlutterPlatform extends PlatformInterface {
   }
 
   /// Sets the margin, either by specifying the margin or by specifying the left and right margins.
+  /// This margin applies to each character.
   /// Unit: 0.125mm
   /// Range: 0-576
   ///

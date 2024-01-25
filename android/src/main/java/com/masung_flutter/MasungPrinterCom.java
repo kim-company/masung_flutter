@@ -30,7 +30,7 @@ public class MasungPrinterCom {
     }
 
     /**
-     * Set left and right margin of the printer
+     * Set left and right margin of the characters
      * Unit: 0.125mm
      *
      * @param left left margin 0-576

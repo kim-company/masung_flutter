@@ -20,7 +20,7 @@ class MasungFlutter {
     return _channel.clearCache();
   }
 
-  /// Sets the margin for the text
+  /// Sets the margin for each carachter.
   /// - Unit: 0.125mm
   /// - Range: 0~576
   ///
