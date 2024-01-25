@@ -126,9 +126,9 @@ public class MasungPrinterCom {
     /**
      * Cuts the paper
      *
-     * @param cut 0: full cut, 1: partial cut
+     * @param fullCut whether to perform a full cut or a partial cut
      */
-    public void printCutpaper(int cut) {
-        printerService.sendBytesToPrinter(PrintCmd.PrintCutpaper(cut));
+    public void cutPaper(boolean fullCut) {
+        printerService.sendBytesToPrinter(PrintCmd.PrintCutpaper(fullCut ? 0 : 1));
     }
 }
