@@ -182,11 +182,11 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private boolean setBold(int bold) {
+    private boolean setBold(boolean bold) {
         try {
             if (printerCom == null)
                 printerCom = new MasungPrinterCom(context);
-            printerCom.SetBold(bold);
+            printerCom.setBold(bold);
             return true;
         } catch (Exception e) {
             return false;
@@ -215,7 +215,7 @@ public class MasungFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private boolean setItalic(int italic) {
+    private boolean setItalic(boolean italic) {
         try {
             if (printerCom == null)
                 printerCom = new MasungPrinterCom(context);

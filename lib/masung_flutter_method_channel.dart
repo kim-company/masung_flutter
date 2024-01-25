@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:masung_flutter/alignment_enum.dart';
+import 'package:masung_flutter/under_line_enum.dart';
 
 import 'masung_flutter_platform_interface.dart';
 
@@ -20,21 +22,102 @@ class MethodChannelMasungFlutter extends MasungFlutterPlatform {
     return version;
   }
 
-  /// Prints the given [text] using the native platform's printing functionality.
-  ///
-  /// Returns a [Future] that completes with a [bool] indicating whether the printing was successful.
   @override
-  Future<bool?> printString(String text) async {
-    final result = await methodChannel.invokeMethod<bool>('printString', text);
-    return result;
+  Future<bool?> clearCache() async {
+    return await methodChannel.invokeMethod<bool>('clearCache');
   }
 
-  /// Cuts the paper using the native platform's cutting functionality.
-  ///
-  /// Returns a [Future] that completes with a [bool] indicating whether the paper cutting was successful.
   @override
-  Future<bool?> cutPaper() async {
-    final result = await methodChannel.invokeMethod<bool>('cutPaper');
-    return result;
+  Future<bool?> setMargin({int? margin, int? left = 0, int? right = 0}) async {
+    if (margin != null) {
+      return await methodChannel.invokeMethod<bool>('setMargin', {
+        'left': margin,
+        'right': margin,
+      });
+    } else {
+      return await methodChannel.invokeMethod<bool>('setMargin', {
+        'left': left,
+        'right': right,
+      });
+    }
+  }
+
+  @override
+  Future<bool?> setAlignment(AlignmentEnum alignment) async {
+    return await methodChannel.invokeMethod<bool>('setAlignment', {
+      'alignment': alignment.value,
+    });
+  }
+
+  @override
+  Future<bool?> setFontSize(
+      {int? fontSize, int? width = 1, int? height = 1}) async {
+    if (fontSize != null) {
+      return await methodChannel.invokeMethod<bool>('setFontSize', {
+        'fontSize': fontSize,
+      });
+    } else {
+      return await methodChannel.invokeMethod<bool>('setFontSize', {
+        'width': width,
+        'height': height,
+      });
+    }
+  }
+
+  @override
+  Future<bool?> setFontBold(bool bold) async {
+    return await methodChannel.invokeMethod<bool>('setFontBold', {
+      'bold': bold,
+    });
+  }
+
+  @override
+  Future<bool?> setFontUnderline(UnderLineEnum underline) async {
+    return await methodChannel.invokeMethod<bool>('setFontUnderline', {
+      'underline': underline.value,
+    });
+  }
+
+  @override
+  Future<bool?> setLineSpace(int lineSpace) async {
+    return await methodChannel.invokeMethod<bool>('setLineSpace', {
+      'lineSpace': lineSpace,
+    });
+  }
+
+  @override
+  Future<bool?> setItalic(bool italic) async {
+    return await methodChannel.invokeMethod<bool>('setItalic', {
+      'italic': italic,
+    });
+  }
+
+  @override
+  Future<bool?> printString(String text, {bool newLine = false}) {
+    return methodChannel.invokeMethod<bool>('printString', {
+      'text': text,
+      'newLine': newLine,
+    });
+  }
+
+  @override
+  Future<bool?> feedLine(int line) async {
+    return await methodChannel.invokeMethod<bool>('feedLine', {
+      'line': line,
+    });
+  }
+
+  @override
+  Future<bool?> feedDot(int dot) {
+    return methodChannel.invokeMethod<bool>('feedDot', {
+      'dot': dot,
+    });
+  }
+
+  @override
+  Future<bool?> cutPaper(bool fullCut) async {
+    return await methodChannel.invokeMethod<bool>('cutPaper', {
+      'fullCut': fullCut,
+    });
   }
 }

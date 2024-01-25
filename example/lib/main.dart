@@ -24,6 +24,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    printText();
   }
 
   Future<void> initPlatformState() async {
@@ -43,6 +44,8 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  printText() {}
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -54,22 +57,6 @@ class _MyAppState extends State<MyApp> {
           children: [
             Center(
               child: Text('Running on: $_platformVersion\n'),
-            ),
-            TextButton(
-              onPressed: () async {
-                var re =
-                    (await _masungFlutterPlugin.printString('hello world'))!;
-                setState(() {
-                  b = re;
-                });
-              },
-              child: const Text('printString'),
-            ),
-            TextButton(
-              onPressed: () async {
-                (await _masungFlutterPlugin.cutPaper())!;
-              },
-              child: const Text('cutPapter'),
             ),
             Text(b ? 'true' : 'false')
           ],

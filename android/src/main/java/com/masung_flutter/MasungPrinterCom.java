@@ -63,10 +63,10 @@ public class MasungPrinterCom {
     /**
      * Set font bold
      *
-     * @param bold 0: normal, 1: bold
+     * @param bold
      */
-    public void SetBold(int bold) {
-        printerService.sendBytesToPrinter(PrintCmd.SetBold(bold));
+    public void setBold(boolean bold) {
+        printerService.sendBytesToPrinter(PrintCmd.SetBold(bold ? 1 : 0));
     }
 
     /**
@@ -91,10 +91,10 @@ public class MasungPrinterCom {
     /**
      * Set font italic
      *
-     * @param italic 0: normal, 1: italic
+     * @param italic
      */
-    public void setItalic(int italic) {
-        printerService.sendBytesToPrinter(PrintCmd.SetItalic(italic));
+    public void setItalic(boolean italic) {
+        printerService.sendBytesToPrinter(PrintCmd.SetItalic(italic ? 1 : 0));
     }
 
     /**
