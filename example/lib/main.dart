@@ -65,6 +65,12 @@ class _MyAppState extends State<MyApp> {
               },
               child: const Text('printString'),
             ),
+            TextButton(
+              onPressed: () async {
+                (await _masungFlutterPlugin.cutPaper())!;
+              },
+              child: const Text('cutPapter'),
+            ),
             Text(b ? 'true' : 'false')
           ],
         ),

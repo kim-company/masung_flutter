@@ -1,9 +1,5 @@
 package com.masung_flutter.msprintsdk;
 
-import static com.masung_flutter.msprintsdk.UtilsTools.convertToBlackWhite;
-import static com.masung_flutter.msprintsdk.UtilsTools.encodeCN;
-import static com.masung_flutter.msprintsdk.UtilsTools.encodeStr;
-import static com.masung_flutter.msprintsdk.UtilsTools.isCN;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -81,28 +77,6 @@ public abstract class PrintCmd {
     }
 
     /**
-     * 3.5 设置汉字间距
-     * @param iChsleftspace  汉字左空，取值0-64，单位0.125mm
-     * @param iChsrightspace 汉字右空，取值0-64，单位0.125mm
-     */
-    public static byte[] SetSpacechinese(int iChsleftspace, int iChsrightspace) {
-        byte[] bCmd = new byte[4];
-        int iIndex = 0;
-        bCmd[iIndex++] = 0x1C;
-        bCmd[iIndex++] = 0x53;
-        if (iChsleftspace > 64) {
-            bCmd[iIndex++] = 64;
-        } else
-            bCmd[iIndex++] = (byte) iChsleftspace;
-
-        if (iChsrightspace > 64) {
-            bCmd[iIndex++] = 64;
-        } else
-            bCmd[iIndex++] = (byte) iChsrightspace;
-        return bCmd;
-    }
-
-    /**
      * 3.6 设置左边界
      * @param iLeftspace 取值0-576，单位0.125mm
      */
@@ -158,38 +132,6 @@ public abstract class PrintCmd {
             bCmd[iIndex++]=(byte) (iOffset>>8);
             bCmd[iIndex++]=(byte) iOffset;
         }
-        return bCmd;
-    }
-
-    /**
-     * 3.9 设置汉字放大
-     * @param iHeight      倍高     0 无效  1 有效
-     * @param iWidth       倍宽     0 无效  1 有效
-     * @param iUnderline   下划线   0 无效  1 有效
-     * @param iChinesetype 汉字字形   0: 24*24  1: 16*16
-     */
-    public static byte[] SetSizechinese(int iHeight, int iWidth,
-                                        int iUnderline, int iChinesetype) {
-        byte[] bCmd = new byte[3];
-        int iIndex = 0;
-        int height = iHeight;
-        int width = iWidth;
-        int underline = iUnderline;
-        if (height > 1)
-            height = 1;
-
-        if (iWidth > 1)
-            width = 1;
-
-        if (iUnderline > 1)
-            underline = 1;
-
-        int iSize = height * 0x08 + width * 0x04 + underline * 0x80
-                + iChinesetype * 0x01;
-
-        bCmd[iIndex++] = 0x1C;
-        bCmd[iIndex++] = 0x21;
-        bCmd[iIndex++] = (byte) iSize;
         return bCmd;
     }
 
@@ -361,22 +303,6 @@ public abstract class PrintCmd {
     }
 
     /**
-     * 3.19 设置汉字模式
-     * @param mode 0 进入汉字模式；1 退出汉字模式
-     *      描述：设置汉字模式有无效
-     */
-    public static byte[] SetReadZKmode(int mode) {
-        byte[] bCmd = new byte[2];
-        int iIndex = 0;
-        bCmd[iIndex++] = 0x1C;
-        if (mode == 1)
-            bCmd[iIndex++] = 0x2E;
-        else
-            bCmd[iIndex++] = 0x26;
-        return bCmd;
-    }
-
-    /**
      * 3.20 设置水平制表位置
      * @param bHTseat 水平制表的位置,从小到大,单位一个ASCII字符,不能为0
      * @param iLength 水平制表的位置数据的个数
@@ -543,7 +469,7 @@ public abstract class PrintCmd {
         return bCmd;
     }
 
-    /*
+    /**
      * 3.30 检测黑标[之前有使用过]
      *     描述：黑标模式下检测黑标，停止在黑标位置
      */
@@ -554,7 +480,7 @@ public abstract class PrintCmd {
         return bCmd;
     }
 
-    /*
+    /**
      * 3.31 检测黑标进纸到打印位置
      *     描述：黑标模式下检测黑标并进纸到打印位置（偏移量打印影响走纸距离）
      */
@@ -594,20 +520,6 @@ public abstract class PrintCmd {
             bCmd[iIndex++] = 0x1;
         }
         return bCmd;
-    }
-
-
-    // 13 51指令
-    public static byte[] PrintQrcode51(String strData,int iLmargin,int iMside,int iRound){
-    /*     byte[] bCmd = new byte[50];
-       QRCodeInfo codeInfo = new QRCodeInfo();
-        codeInfo.setlMargin(iLmargin);
-        codeInfo.setmSide(iMside);
-        bCmd = codeInfo.Get51QRBCode(strData, iRound);
-        if(bCmd.length != 0)
-            return bCmd;
-        else*/
-            return null;
     }
     /**
      * 主板专用二维码打印【T500II+MS532II】
@@ -912,151 +824,6 @@ public abstract class PrintCmd {
         return bCmd;
     }
 
-
-    /**
-     * 根据指定路径的图片打印
-     *    支持图片内容为黑白两色的 BMP/JPG/PNG格式的文件
-     * @param strPath 文件路径
-     * @return
-     */
-
-    public static byte[] PrintDiskImagefile(String strPath) {
-        byte[] bytes;
-        FileInputStream file = null;
-        try {
-            file = new FileInputStream(strPath);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Bitmap bitmap = BitmapFactory.decodeStream(file);
-        if (bitmap == null) {
-
-            return null;
-        }
-
-        if (!strPath.substring(strPath.toLowerCase().indexOf(".") + 1).equals("bmp")) {
-            bitmap = convertToBlackWhite(bitmap);
-            int width = bitmap.getWidth();
-            int  heigh = bitmap.getHeight();
-            int iDataLen = width * heigh;
-            int[] pixels = new int[iDataLen];
-            bitmap.getPixels(pixels, 0, width, 0, 0, width, heigh);
-            bytes = PrintDiskImagefile(pixels,width,heigh);
-        }else
-        {
-            int width = bitmap.getWidth();
-            int  heigh = bitmap.getHeight();
-            int iDataLen = width * heigh;
-            int[] pixels = new int[iDataLen];
-            bitmap.getPixels(pixels, 0, width, 0, 0, width, heigh);
-            bytes = PrintDiskImagefile(pixels,width,heigh);
-
-        }
-
-        return bytes;
-    }
-    public static byte[] PrintDiskImagefile(int[] pixels, int iWidth, int iHeight) {
-        int iBw = iWidth / 8;
-        int iMod = iWidth % 8;
-        if (iMod > 0)
-            iBw = iBw + 1;
-        int iDataLen = iBw * iHeight;
-        byte[] bCmd = new byte[iDataLen + 8];
-        int iIndex = 0;
-        bCmd[iIndex++] = 0x1D;
-        bCmd[iIndex++] = 0x76;
-        bCmd[iIndex++] = 0x30;
-        bCmd[iIndex++] = 0x0;
-        bCmd[iIndex++] = (byte) iBw;
-        bCmd[iIndex++] = (byte) (iBw >> 8);
-        bCmd[iIndex++] = (byte) iHeight;
-        bCmd[iIndex++] = (byte) (iHeight >> 8);
-
-        int iValue1 = 0;
-        int iValue2 = 0;
-        int iRow = 0;
-        int iCol = 0;
-        int iW = 0;
-        int iValue3 = 0;
-        int iValue4 = 0;
-        for (iRow = 0; iRow < iHeight; iRow++) {
-            for (iCol = 0; iCol < iBw - 1; iCol++) {
-                iValue2 = 0;
-
-                iValue1 = pixels[iW++];
-                if(iValue1<-1)
-                    iValue2 = iValue2+0x80;
-                iValue1 = pixels[iW++];
-                if(iValue1<-1)
-                    iValue2 = iValue2+0x40;
-                iValue1 = pixels[iW++];
-                if(iValue1<-1)
-                    iValue2 = iValue2+0x20;
-                iValue1 = pixels[iW++];
-                if(iValue1<-1)
-                    iValue2 = iValue2+0x10;
-                iValue1 = pixels[iW++];
-                if(iValue1<-1)
-                    iValue2 = iValue2+0x8;
-                iValue1 = pixels[iW++];
-                if(iValue1<-1)
-                    iValue2 = iValue2+0x4;
-                iValue1 = pixels[iW++];
-                if(iValue1<-1)
-                    iValue2 = iValue2+0x2;
-                iValue1 = pixels[iW++];
-                if(iValue1<-1)
-                    iValue2 = iValue2+0x1;
-                if(iValue3 < -1) // w1
-                    iValue4 = iValue4 + 0x10;
-                bCmd[iIndex++] = (byte) (iValue2);
-            }
-            iValue2 = 0;
-            if(iValue4 > 0)      // w2
-                iValue3 = 1;
-            if (iMod == 0) {
-                for (iCol = 8; iCol > iMod; iCol--) {
-                    iValue1 = pixels[iW++];
-                    if (iValue1 < -1)
-                        iValue2 = iValue2 + (1 << iCol);
-                }
-            } else {
-                for (iCol = 0; iCol < iMod; iCol++) {
-                    iValue1 = pixels[iW++];
-                    if (iValue1 < -1)
-                        iValue2 = iValue2 + (1 << (8 - iCol));
-                }
-            }
-            bCmd[iIndex++] = (byte) (iValue2);
-        }
-        return bCmd;
-    }
-
-
-
-    /**
-     * 3.39 打印NV BMP 文件  【可用，已通过测试】
-     * @param iNvindex  NV位图索引
-     * @param iMode     48 普通、49 倍宽、50 倍高、51 倍宽倍高(4倍大小)
-     *  描述：打印NV BMP文件，仅支持单色BMP文件
-     */
-    public static byte[] PrintNvbmp(int iNvindex, int iMode) {
-        byte[] bCmd = new byte[4];
-        int iIndex = 0;
-        int iValue = iMode;
-        if (iMode < 48)
-            iValue = 48;
-        if (iMode > 51)
-            iValue = 51;
-
-        bCmd[iIndex++] = 0x1C;
-        bCmd[iIndex++] = 0x70;
-        bCmd[iIndex++] = (byte) iNvindex;
-        bCmd[iIndex++] = (byte) iValue;
-        return bCmd;
-    }
-
     /**
      * 3.42 获取打印机状态
      * @return     0 打印机正常 、1 打印机未连接或未上电、2 打印机和调用库不匹配
@@ -1239,33 +1006,6 @@ public abstract class PrintCmd {
 
         return 0;
     }
-
-    /**
-     * 3.43 获取打印机特殊功能状态
-     * 【描述：获取打印机特殊功能状态，仅适用于D347部分机型】
-     * 返回值： 0 打印机正常、  1 打印机未连接或未上电、        2 打印机和调用库不匹配
-     3 当前使用打印机无特殊功能、 4 容纸器错误、5 堵纸
-     6 卡纸、            7 拽纸、           8 出纸传感器有纸
-     * @return int
-     */
-//	public static byte[] GetStatusspecial() {
-//		try {
-//			byte[] b_recv = new byte[6];
-//			int iIndex = 0;
-//			// 01 判断打印机是否链接正常
-//			b_recv[iIndex++] = 0x10;
-//			b_recv[iIndex++] = 0x04;
-//			b_recv[iIndex++] = 0x01;
-//			//05 判断打印机特殊功能  容纸器错误 堵纸  卡纸  拽纸  出纸传感器有纸
-//			b_recv[iIndex++] = 0x10;
-//			b_recv[iIndex++] = 0x04;
-//			b_recv[iIndex++] = 0x05;
-//			return b_recv;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
 
     /**
      * 3.44 获取打印机信息
@@ -1633,24 +1373,6 @@ public abstract class PrintCmd {
         return bCmd;
     }
 
-    private static String getHexResult(String targetStr) {
-        StringBuilder hexStr = new StringBuilder();
-        int len = targetStr.length();
-        if (len > 0) {
-            for (int i = 0; i < len; i++) {
-                char tempStr = targetStr.charAt(i);
-                String data = String.valueOf(tempStr);
-                if (isCN(data)) {
-                    hexStr.append(encodeCN(data));
-                } else {
-                    hexStr.append(encodeStr(data));
-                }
-            }
-        }
-        return hexStr.toString();
-    }
-
-
     /** ==================================End=================================== */
 
     /**=====================JNA=========================**/
@@ -1770,47 +1492,6 @@ public abstract class PrintCmd {
         return null;
     }
 
-    /**
-     * 打印磁盘BMP文件，仅支持单色BMP文件
-     * @param strPath 图片路径
-     */
-
-    public static  byte[] PrintDiskbmpfile(String strPath){
-        try{
-            int iResult = JNAData1.INSTANCE.Data1PrintDiskbmpfile(strPath);
-            if(iResult > 0) {
-                String strPrintData = JNAData1.INSTANCE.Data1GetPrintDataA();
-                byte[] bData =JNAStringToByte(strPrintData,iResult);
-                JNAData1.INSTANCE.Data1Release();
-                return bData;
-            }
-        }catch(Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-            return null;
-        }
-
-    /**3.47
-     * @param iNums    位图数量(单个文件最大64K，所有文件最大192K)
-     * @param strPath  图像文件路径（若只有文件名则使用当前路径，
-     * 				      若指定全路径则使用指定的路径），以”;”分隔，个数需和iNums参数一致
-     */
-    public static byte[] SetNvbmp(int iNums, String strPath){
-        try{
-            int iResult = JNAData1.INSTANCE.Data1SetNvbmp(iNums,strPath);
-            if(iResult > 0) {
-                String strPrintData = JNAData1.INSTANCE.Data1GetPrintDataA();
-                byte[] bData =JNAStringToByte(strPrintData,iResult);
-                JNAData1.INSTANCE.Data1Release();
-                return bData;
-            }
-        }catch(Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
 	
 	//状态值英文解析
     public static String getStatusDescriptionEn(int iStatus)
