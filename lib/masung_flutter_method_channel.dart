@@ -54,7 +54,8 @@ class MethodChannelMasungFlutter extends MasungFlutterPlatform {
       {int? fontSize, int? width = 1, int? height = 1}) async {
     if (fontSize != null) {
       return await methodChannel.invokeMethod<bool>('setTextSize', {
-        'fontSize': fontSize,
+        'width': fontSize,
+        'height': fontSize,
       });
     } else {
       return await methodChannel.invokeMethod<bool>('setTextSize', {

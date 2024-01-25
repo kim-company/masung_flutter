@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
     _masungFlutterPlugin.feedDot(100);
     _masungFlutterPlugin.printString('09:09:09', newLine: true);
     _masungFlutterPlugin.feedLine(5);
-    _masungFlutterPlugin.cutPaper(false);
+    _masungFlutterPlugin.cutPaper(true);
   }
 
   @override
